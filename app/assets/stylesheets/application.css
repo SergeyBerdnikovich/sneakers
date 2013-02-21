@@ -11,3 +11,11 @@
  *= require_self
  *= require_tree .
  */
+
+
+.current_0 a img {
+  margin-top: -7px;
+}
+.sf-menu > li.last a {
+  padding-left: 470px;
+}

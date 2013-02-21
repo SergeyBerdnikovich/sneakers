@@ -1,0 +1,180 @@
+body {
+  min-width: 1044px;
+}
+
+/* Containers
+----------------------------------------------------------------------------------------------------*/
+.container_4 {
+  margin-left: auto;
+  margin-right: auto;
+  width: 1044px;
+}
+
+/* Grid >> Global
+----------------------------------------------------------------------------------------------------*/
+
+
+.grid_1,
+.grid_2,
+.grid_3,
+.grid_4 {
+  display:inline;
+  float: left;
+  position: relative;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+
+
+.push_1, .pull_1,
+.push_2, .pull_2,
+.push_3, .pull_3,
+.push_4, .pull_4 {
+  position:relative;
+}
+
+
+/* Grid >> Children (Alpha ~ First, Omega ~ Last)
+----------------------------------------------------------------------------------------------------*/
+
+.alpha {
+  margin-left: 0;
+}
+
+.omega {
+  margin-right: 0;
+}
+
+/* Grid >> 4 Columns
+----------------------------------------------------------------------------------------------------*/
+
+
+.container_4 .grid_1 {
+  width:241px;
+}
+
+.container_4 .grid_2 {
+  width:502px;
+}
+
+.container_4 .grid_3 {
+  width:763px;
+}
+
+.container_4 .grid_4 {
+  width:1024px;
+}
+
+
+
+
+/* Prefix Extra Space >> 4 Columns
+----------------------------------------------------------------------------------------------------*/
+
+
+.container_4 .prefix_1 {
+  padding-left:261px;
+}
+
+.container_4 .prefix_2 {
+  padding-left:522px;
+}
+
+.container_4 .prefix_3 {
+  padding-left:783px;
+}
+
+
+
+/* Suffix Extra Space >> 4 Columns
+----------------------------------------------------------------------------------------------------*/
+
+
+.container_4 .suffix_1 {
+  padding-right:261px;
+}
+
+.container_4 .suffix_2 {
+  padding-right:522px;
+}
+
+.container_4 .suffix_3 {
+  padding-right:783px;
+}
+
+
+
+/* Push Space >> 4 Columns
+----------------------------------------------------------------------------------------------------*/
+
+
+.container_4 .push_1 {
+  left:261px;
+}
+
+.container_4 .push_2 {
+  left:522px;
+}
+
+.container_4 .push_3 {
+  left:783px;
+}
+
+
+
+/* Pull Space >> 4 Columns
+----------------------------------------------------------------------------------------------------*/
+
+
+.container_4 .pull_1 {
+  left:-261px;
+}
+
+.container_4 .pull_2 {
+  left:-522px;
+}
+
+.container_4 .pull_3 {
+  left:-783px;
+}
+
+
+
+
+/* `Clear Floated Elements
+----------------------------------------------------------------------------------------------------*/
+
+
+.clear {
+  clear: both;
+  display: block;
+  overflow: hidden;
+  visibility: hidden;
+  width: 0;
+  height: 0;
+}
+
+
+.clearfix:before,
+.clearfix:after {
+  content: '\0020';
+  display: block;
+  overflow: hidden;
+  visibility: hidden;
+  width: 0;
+  height: 0;
+}
+
+.clearfix:after {
+  clear: both;
+}
+
+/*
+  The following zoom:1 rule is specifically for IE6 + IE7.
+  Move to separate stylesheet if invalid CSS is a problem.
+*/
+
+.clearfix {
+  zoom: 1;
+}

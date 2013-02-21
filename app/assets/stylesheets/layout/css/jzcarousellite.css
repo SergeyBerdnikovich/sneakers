@@ -1,0 +1,54 @@
+
+.carousel-box  		{ position:relative;padding: 0px 0px 20px 0px;background:url('/assets/layout/brand_shadow.png') 0 100% no-repeat transparent;}
+
+.carousel-box .inner				{
+	background:#fff;
+-webkit-box-shadow: inset 0px 0px 20px 0px #f6f6f6;
+        box-shadow: inset 0px 0px 20px 0px #f6f6f6;
+				border:1px solid #fff;
+	-webkit-border-radius: 6px;
+    			border-radius: 6px;
+	}
+.carousel-box .inner2				{padding: 0px 19px 0px 38px;}
+
+.carousel-box li						{margin-left:20px !important;}
+.carousel-box ul						{margin-left:-20px !important;}
+
+.slider_wrapper							{border:0px solid #dddddd;margin:0px 0px 0px 0px;padding: 0px 0px 0px 0px; overflow:hidden;}
+
+.carousel-box ul.featured					{}
+.carousel-box a.model,
+.carousel-box a.name,
+.carousel-box .desc					{color:#000;}
+
+.carousel-box .name					{padding: 8px 0px 5px 0px; text-align:left;}
+.carousel-box .name span a 	{ }/**/
+.carousel-box a.model span	{text-transform:uppercase;}
+.carousel-box a.model				{padding: 14px 14px 0px 14px; display:block;}
+.carousel-box .pic_padd			{display:block;line-height:0; padding-top:5px;}
+
+.carousel-box .desc					{padding: 4px 14px 0px 14px; display:inline-block; font-weight:normal; line-height:1em;}
+
+.carousel-box a.prev		{left:15px;}
+.carousel-box a.next		{right:15px;}
+.carousel-box a.prev,
+.carousel-box a.next				{width:10px; height:20px; display:inline-block;background:url('/assets/layout/next_prev.png') 0px 0px no-repeat transparent; position:absolute; top:50%; z-index:999; margin-top:-24px; cursor:pointer;}
+
+.carousel-box a.prev				{ background-position:0 0;}
+.carousel-box a.next				{ background-position:-11px 0;}
+.carousel-box a.prev:hover	{ background-position:0px -21px;}
+.carousel-box a.next:hover	{ background-position:-11px -21px;}
+
+.carousel-box .box_wrapper_title		{padding-left:0px;}
+/* ************************************************************************************* */
+/*			.carousel-box .name span a				{
+        font-family: sans-serif;
+        font-size:0em;
+      }
+      .wf-active .carousel-box .name span a	 {
+
+				height:auto;
+      }
+
+      .wf-active .carousel-box .name span a	{font-size:1.25em;}
+ ************************************************************************************* */
