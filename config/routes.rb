@@ -1,4 +1,10 @@
 Sneakers::Application.routes.draw do
+  ActiveAdmin.routes(self)
+
+  devise_for :admin_users, ActiveAdmin::Devise.config
+
+  resources :products, :only => [:index, :show]
+
   get "pages/welcome"
 
   # The priority is based upon order of creation:

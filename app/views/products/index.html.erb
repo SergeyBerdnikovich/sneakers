@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+<body>
+  <div class="wrapper">
+    <div class="row_3">
+      <div class="container_1064">
+        <div class="grid_">
+          <div class="for_smart_browsers">
+            <ul class="banner_set">
+              <% @products.each do |product| %>
+                <li class="item">
+                  <a href="<%= product_path(product) %>" target="_self">
+                    <% if product.galleries.first %>
+                      <img src="<%= product.galleries.first.image.url(:for_product) %>" width="328" height="237" />
+                    <% else %>
+                      <img src="/assets/no_photo_available.gif" width="328" height="237" />
+                    <% end %>
+                  </a>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+</body>
+</html>

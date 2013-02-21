@@ -23,48 +23,25 @@
             </script>
             <div class="nivoSlider_wrapper">
               <div id="slider" class="nivoSlider">
-                <a href="#">
-                  <img src="http://cs14114.userapi.com/c7005/v7005067/989/2QecGQx5A1Y.jpg" width="1064" height="490" />
-                </a>
-                <a href="#">
-                  <img src="http://cs14114.userapi.com/c7005/v7005964/a24/mwG9KCrUIcw.jpg" width="1064" height="490" />
-                </a>
-                <a href="#">
-                  <img src="http://cs14114.userapi.com/c7001/v7001581/3b71/ypNT3bxgx5s.jpg" width="1064" height="490" />
-                </a>
+                <% @gallery_for_slider.each do |gallery| %>
+                  <a href="#">
+                    <img src="<%= gallery.image.url %>" width="1064" height="490" />
+                  </a>
+                <% end %>
               </div>
             </div>
             <ul class="banner_set">
-              <li class="item1">
-                <a href="#" target="_self">
-                  <img src="http://cs309825.userapi.com/v309825067/513c/ec1FztZsAcM.jpg" width="328" height="237" />
-                </a>
-              </li>
-              <li class="item2">
-                <a href="#" target="_self">
-                  <img src="http://cs309825.userapi.com/v309825067/516e/d1XXguoFAPc.jpg" width="328" height="237" />
-                </a>
-              </li>
-              <li class="item3">
-                <a href="#" target="_self">
-                  <img src="http://cs309825.userapi.com/v309825067/5159/jm5J6maxfYI.jpg" width="328" height="237" />
-                </a>
-              </li>
-              <li class="item4">
-                <a href="#" target="_self">
-                  <img src="http://cs309825.userapi.com/v309825067/5160/6vHtfyExHYQ.jpg" width="328" height="237" />
-                </a>
-              </li>
-              <li class="item5">
-                <a href="#" target="_self">
-                  <img src="http://cs309825.userapi.com/v309825067/512f/Du-q_0E1Gas.jpg" width="328" height="237" />
-                </a>
-              </li>
-              <li class="item6">
-                <a href="#" target="_self">
-                  <img src="http://cs309825.userapi.com/v309825067/5136/QKkzGfzAdQE.jpg" width="328" height="237" />
-                </a>
-              </li>
+              <% @last_products.each do |product| %>
+                <li class="item">
+                  <a href="<%= product_path(product) %>" target="_self">
+                    <% if product.galleries.first %>
+                      <img src="<%= product.galleries.first.image.url(:for_product) %>" width="328" height="237" />
+                    <% else %>
+                      <img src="/assets/no_photo_available.gif" width="328" height="237" />
+                    <% end %>
+                  </a>
+                </li>
+              <% end %>
             </ul>
           </div>
         </div>

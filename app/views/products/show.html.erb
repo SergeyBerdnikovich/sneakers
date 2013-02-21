@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en"><head>
+<script type="text/javascript" src="/assets/layout/jquery/bxGallery/jquery.bxGallery.1.1.min.js"></script>
+<script type="text/javascript" src="/assets/layout/jquery/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+</head>
+<body>
+<p id="back-top"><a href="#top"><span>Top</span></a></p>
+<div id="bodyWrapper" class="bg_body ">
+  <div class="wrapper">
+    <div class="row_4">
+      <div class="container_4">
+        <div id="bodyContent" class="grid_3">
+          <div class="contentContainer">
+            <div class="contentPadd prods_info_page">
+              <div class="prods_info decks big">
+                <div class="forecastle">
+                  <ol class="masthead">
+                    <li class="port_side left_side_pic-1">
+                      <div id="piGal" class="hover">
+                        <ul class="relative">
+                          <% @product.galleries.each do |gallery| %>
+                          <li class="wrapper_pic_div">
+                            <a href="http://localhost:3000/<%= gallery.image.url %>" target="_blank" rel="fancybox" title="" class="prods_pic_bg" style="width:220px;height:188px;">
+                              <img src="http://localhost:3000/<%= gallery.image.url %>" alt="" width="220" height="188"  style="width:220px;height:188px;margin:0px 0px 0px 0px;" />
+                              <div class="wrapper_pic_t" style="width:220px;height:188px;">
+                                <div class="wrapper_pic_r" style="width:220px;height:188px;">
+                                  <div class="wrapper_pic_b" style="width:220px;height:188px;">
+                                    <div class="wrapper_pic_l" style="width:220px;height:188px;">
+                                      <div class="wrapper_pic_tl" style="width:220px;height:188px;">
+                                        <div class="wrapper_pic_tr" style="width:220px;height:188px;">
+                                          <div class="wrapper_pic_bl" style="width:220px;height:188px;">
+                                            <div class="wrapper_pic_br" style="width:220px;height:188px;">
+                                              <div class="wrapper_pic_zoom" style="width:220px;height:188px;">
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </a>
+                          </li>
+                          <% end %>
+                        </ul>
+                      </div>
+                      <script type="text/javascript">
+                        $(function(){
+                          var myWidth = 65;
+                          var myHeight = myWidth * 0.85454545454545;
+                          $('#piGal ul').bxGallery({
+                            maxwidth: '220',
+                            maxheight: '188',
+                            thumbwidth: myWidth,
+                            thumbheight: myHeight,
+                            thumbcontainer: 227,
+                            load_image: '/assets/layout/jquery/bxGallery/spinner.gif'
+                          })
+                        });
+                      </script>
+                      <script type="text/javascript">
+                        $("#piGal a[rel^='fancybox']").fancybox({
+                          cyclic: true
+                        });
+                      </script>
+                    </li>
+                    <li class="starboard_side right_side_pic-1">
+                      <div class="prod_info_next">
+                        <div class="fl_left">
+                          <strong class="button_content button_content22">
+                            <strong class="button bg_button">
+                              <strong class="button-t">
+                                <span class="tdbLink">
+                                  <% if @product.id > 1 %>
+                                    <a id="tdb1" href="<%= product_path(Product.where('id < ?', @product.id ).order('ID desc').limit(1).first) %>">Previous</a>
+                                  <% end %>
+                                </span>
+                                <script type="text/javascript">
+                                  $("#tdb1").button({icons:{primary:"ui-icon-arrowthick-1-w"}}).addClass("ui-priority-secondary").parent().removeClass("tdbLink");
+                                </script>
+                              </strong>
+                            </strong>
+                          </strong>
+                        </div>
+                        <div class="fl_right button_next">
+                          <strong class="button_content button_content22">
+                            <strong class="button bg_button">
+                              <strong class="button-t">
+                                <span class="tdbLink">
+                                  <% if @product.id < Product.last.id %>
+                                    <a id="tdb2" href="<%= product_path(Product.where('id > ?', @product.id ).limit(1).first) %>">Next</a>
+                                  <% end %>
+                                </span>
+                                <script type="text/javascript">
+                                  $("#tdb2").button({icons:{primary:"ui-icon-arrowthick-1-e"}}).addClass("ui-priority-secondary").parent().removeClass("tdbLink");
+                                </script>
+                              </strong>
+                            </strong>
+                          </strong>
+                        </div>
+                        <div class="prod_next">Product&nbsp;
+                          <strong>
+                            <u><%= Product.where('id < ?', @product.id ).count + 1 %></u>
+                          </strong>
+                           of
+                          <strong><%= Product.all.count %></strong>
+                        </div>
+                      </div>
+                      <div class="info">
+                        <div class="data data_padd small_title">
+                          This product was added to our catalog on <%= @product.created_at %>.
+                        </div><br />
+                        <h2><%= @product.title %></h2><br />
+                        <h2 class="price">
+                          <b>Price:&nbsp;&nbsp;</b>
+                          <span class="productSpecialPrice">$<%= @product.cost %></span>
+                        </h2>
+                        <div class="desc desc_padd">
+                          <p><%= @product.description %><p>
+                        </div>
+                        <div class="buttonSet">
+                          <div class="fl_right" align="right">
+                            <strong class="button_content button_content2">
+                              <strong class="button bg_button">
+                                <strong class="button-t">
+                                  <input type="hidden" name="products_id" value="2" />
+                                  <span class="tdbLink">
+                                    <button id="tdb4" type="submit">Buy RSVP</button>
+                                  </span>
+                                  <script type="text/javascript">
+                                    $("#tdb4").button({icons:{primary:"ui-icon-cart"}}).addClass("ui-priority-primary").parent().removeClass("tdbLink");
+                                  </script>
+                                </strong>
+                              </strong>
+                            </strong>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  </ol>
+                </div>
+                <div class="infoBoxWrapper">
+                  <div class="box_wrapper">
+                    <div class="infoBoxHeading prod_page">
+                      <div class="box_wrapper_title22">
+                        <div class="box_wrapper_title">
+                          <h1><span class="title-icon"></span>Share Product</h1>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="infoBoxContents">
+                      <a href="http://www.facebook.com/share.php?u=http%3A%2F%2Flivedemo00.template-help.com%2Fosc_42258%2Fproduct_info.php%2Fhead-pct-four-tennis-racket-p-2" target="_blank">
+                        <img src="/assets/layout/facebook.png" border="0" title="Share on Facebook" alt="Share on Facebook" />
+                      </a>
+                      <a href="http://twitter.com/home?status=http%3A%2F%2Flivedemo00.template-help.com%2Fosc_42258%2Fproduct_info.php%2Fhead-pct-four-tennis-racket-p-2" target="_blank">
+                        <img src="/assets/layout/twitter.png" border="0" title="Share on Twitter" alt="Share on Twitter" />
+                      </a>
+                      <a href="http://www.google.com/buzz/post?url=http%3A%2F%2Flivedemo00.template-help.com%2Fosc_42258%2Fproduct_info.php%2Fhead-pct-four-tennis-racket-p-2" target="_blank">
+                        <img src="/assets/layout/google_buzz.png" border="0" title="Share on Google Buzz" alt="Share on Google Buzz" />
+                      </a>
+                      <a href="http://digg.com/submit?url=http%3A%2F%2Flivedemo00.template-help.com%2Fosc_42258%2Fproduct_info.php%2Fhead-pct-four-tennis-racket-p-2" target="_blank">
+                        <img src="/assets/layout/digg.png" border="0" title="Share on Digg" alt="Share on Digg"/>
+                      </a>
+                      <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+                      <g:plusone size="small"  class="fl_feft"></g:plusone>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</body>
+</html>
