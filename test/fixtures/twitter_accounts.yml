@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  city_id: 1
+  name: MyText
+  comment: MyText
+  last_checked: 1
+  consumer_key: MyText
+  consumer_secret: MyText
+  oauth_token: MyText
+  oauth_token_secret: MyText
+
+two:
+  city_id: 1
+  name: MyText
+  comment: MyText
+  last_checked: 1
+  consumer_key: MyText
+  consumer_secret: MyText
+  oauth_token: MyText
+  oauth_token_secret: MyText
