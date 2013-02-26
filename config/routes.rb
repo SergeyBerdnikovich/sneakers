@@ -1,4 +1,6 @@
 Sneakers::Application.routes.draw do
+  devise_for :users
+
   resources :cities
 
   resources :twitter_accounts
@@ -10,6 +12,7 @@ Sneakers::Application.routes.draw do
   resources :products, :only => [:index, :show] do
     resources :orders, :only => [:new, :create]
   end
+  resources :orders, :only => [:show, :index]
 
   get "pages/welcome"
 

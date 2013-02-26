@@ -1,51 +1,43 @@
-<!DOCTYPE html>
-<html dir="ltr" lang="en">
-<body>
-  <div class="wrapper">
-    <div class="row_3">
-      <div class="container_1064">
-        <div class="grid_">
-          <div class="for_smart_browsers">
-            <style type="text/css">
-              .nivoSlider_wrapper {
-                width: 1064px; height: 490px; /* Set the size */
-              }
-              #screenshot img { width:SUPERFISH_IMAGE_WIDTHpx;height:SUPERFISH_IMAGE_HEIGHTpx;}
-              #screenshotCategory img { width:84px;height:84px;}
-            </style>
-            <style type="text/css">
-              .nivo-caption           {display:none !important;}
-            </style>
-            <script type="text/javascript">
-              $(window).load(function() {
-                $('#slider').nivoSlider ();
-              });
-            </script>
-            <div class="nivoSlider_wrapper">
-              <div id="slider" class="nivoSlider">
-                <% @gallery_for_slider.each do |gallery| %>
-                  <a href="#">
-                    <img src="<%= gallery.image.url %>" width="1064" height="490" />
-                  </a>
-                <% end %>
-              </div>
-            </div>
-            <ul class="banner_set">
-              <% @last_products.each do |product| %>
-                <li class="item">
-                  <a href="<%= product_path(product) %>" target="_self">
-                    <% if product.galleries.first %>
-                      <img src="<%= product.galleries.first.image.url(:for_product) %>" width="328" height="237" />
-                    <% else %>
-                      <img src="/assets/no_photo_available.gif" width="328" height="237" />
-                    <% end %>
-                  </a>
-                </li>
-              <% end %>
-            </ul>
-          </div>
+<div class="container_1064">
+  <div class="grid_">
+    <div class="for_smart_browsers">
+      <style type="text/css">
+        .nivoSlider_wrapper {
+          width: 1064px; height: 490px; /* Set the size */
+        }
+        #screenshot img { width:SUPERFISH_IMAGE_WIDTHpx;height:SUPERFISH_IMAGE_HEIGHTpx;}
+        #screenshotCategory img { width:84px;height:84px;}
+      </style>
+      <style type="text/css">
+        .nivo-caption           {display:none !important;}
+      </style>
+      <script type="text/javascript">
+        $(window).load(function() {
+          $('#slider').nivoSlider ();
+        });
+      </script>
+      <div class="nivoSlider_wrapper">
+        <div id="slider" class="nivoSlider">
+          <% @gallery_for_slider.each do |gallery| %>
+            <a href="#">
+              <img src="<%= gallery.image.url %>" width="1064" height="490" />
+            </a>
+          <% end %>
         </div>
       </div>
+      <ul class="banner_set">
+        <% @last_products.each do |product| %>
+          <li class="item">
+            <a href="<%= product_path(product) %>" target="_self">
+              <% if product.galleries.first %>
+                <img src="<%= product.galleries.first.image.url(:for_product) %>" width="328" height="237" />
+              <% else %>
+                <img src="/assets/no_photo_available.gif" width="328" height="237" />
+              <% end %>
+            </a>
+          </li>
+        <% end %>
+      </ul>
     </div>
-</body>
-</html>
+  </div>
+

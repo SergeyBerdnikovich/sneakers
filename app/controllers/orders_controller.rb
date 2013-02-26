@@ -1,11 +1,19 @@
 class OrdersController < ApplicationController
+  before_filter :authenticate_user!
+
   def new
     @product = Product.find(params[:product_id])
     @order = Order.new
   end
+
+  def index
+    @orders = Order.find_all_by_user_id(current_user.id)
+  end
+
   def create
     @product = Product.find(params[:product_id])
     @order = Order.new(params[:order])
+    @order.user = current_user
     @order.product = @product
 
     respond_to do |format|

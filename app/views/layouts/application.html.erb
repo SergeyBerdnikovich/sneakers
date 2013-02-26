@@ -31,23 +31,28 @@
                 <a href="#">CONTACT US</a>
               </li>
               <li class="current_0">
+                <a href="/orders">ORDERS</a>
+              </li>
+              <li class="current_0">
                 <a href="<%= admin_root_path %>">LOGIN</a>
               </li>
             </ul>
           </div>
         </div>
       </div>
+    </div>
+  </div>
+  <div class="wrapper">
+    <div class="row_3">
       <% if notice || alert %>
         <div class="row">
           <%= raw "<p class='flash_notice'> #{notice}</p>"  if notice %>
           <%= raw "<p class='flash_error'>#{alert}</p>"     if alert %>
         </div>
       <% end %>
+      <%= yield %>
     </div>
   </div>
-
-  <%= yield %>
-
   <div class="wrapper_row_5">
     <div class="row_5">
       <div class="container_4">

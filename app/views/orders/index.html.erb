@@ -1,0 +1,20 @@
+<table>
+  <tr>
+    <td>Date</td>
+    <td>Title</td>
+    <td>Cost</td>
+    <td>Size</td>
+    <td>Name</td>
+    <td>Paid</td>
+  </tr>
+<% @orders.each do |order| %>
+<tr>
+  <td><%= order.created_at %></td>
+  <td><%= order.product.title %></td>
+  <td><%= order.product.cost %></td>
+  <td><%= order.size %></td>
+  <td><%= order.name %></td></td>
+  <td><%= order.paid == true ? 'paid' : 'not paid' %></td>
+</tr>
+<% end %>
+</table>
