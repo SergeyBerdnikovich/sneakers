@@ -37,6 +37,12 @@
           </div>
         </div>
       </div>
+      <% if notice || alert %>
+        <div class="row">
+          <%= raw "<p class='flash_notice'> #{notice}</p>"  if notice %>
+          <%= raw "<p class='flash_error'>#{alert}</p>"     if alert %>
+        </div>
+      <% end %>
     </div>
   </div>
 

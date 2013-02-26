@@ -1,18 +1,15 @@
 Sneakers::Application.routes.draw do
-  resources :orders
-
-
   resources :cities
 
-
   resources :twitter_accounts
-
 
   ActiveAdmin.routes(self)
 
   devise_for :admin_users, ActiveAdmin::Devise.config
 
-  resources :products, :only => [:index, :show]
+  resources :products, :only => [:index, :show] do
+    resources :orders, :only => [:new, :create]
+  end
 
   get "pages/welcome"
 

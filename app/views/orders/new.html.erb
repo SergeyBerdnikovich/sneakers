@@ -1,0 +1,22 @@
+<div id="bodyWrapper" class="bg_body ">
+  <div class="wrapper">
+    <div class="row_4">
+      <%= form_for [@product, @order] do |f| %>
+        <div class="field">
+          <%= f.label :name %>:<br />
+          <%= f.text_field :name %>
+        </div>
+        <div class="field">
+          <%= f.label :size %>:<br />
+          <%= f.text_field :size %>
+        </div>
+        <div class="field">
+          <%= f.label :city_name %><br />
+          <%= f.collection_select :city_id, City.all, :id, :name, prompt: true %>
+        </div>
+
+        <%= f.submit %>
+      <% end %>
+    </div>
+  </div>
+</div>
