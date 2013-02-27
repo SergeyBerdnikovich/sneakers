@@ -33,9 +33,15 @@
               <li class="current_0">
                 <a href="/orders">ORDERS</a>
               </li>
-              <li class="current_0">
-                <a href="<%= admin_root_path %>">LOGIN</a>
-              </li>
+              <% if current_user %>
+                <li class="current_0">
+                  <%= link_to 'LOGOUT', destroy_user_session_path, :method => 'DELETE' %>
+                </li>
+              <% else %>
+                <li class="current_0">
+                  <%= link_to 'LOGIN', new_user_session_path %>
+                </li>
+              <% end %>
             </ul>
           </div>
         </div>

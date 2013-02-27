@@ -1,5 +1,5 @@
 class OrdersController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, :only => :index
 
   def new
     @product = Product.find(params[:product_id])
