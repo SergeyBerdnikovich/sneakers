@@ -2,8 +2,14 @@ class OrdersController < ApplicationController
   before_filter :authenticate_user!, :only => :index
 
   def new
-    @product = Product.find(params[:product_id])
-    @order = Order.new
+    product = Product.find(params[:product_id])
+    @order = product.orders.build
+    if params[:PayerID]
+      @order.paypal_customer_token = params[:PayerID]
+      @order.paypal_recurring_profile_token = params[:token]
+      @order.name = PayPal::Recurring.new(:token => params[:token]).checkout_details.email
+      @order.paid = true
+    end
   end
 
   def index
@@ -24,6 +30,23 @@ class OrdersController < ApplicationController
         format.html { render action: "new" }
         format.json { render json: @order.errors, status: :unprocessable_entity }
       end
+    end
+  end
+
+  def paypal_checkout
+    product = Product.find(params[:product_id])
+    ppr = PayPal::Recurring.new({
+      return_url: new_product_order_url(:product_id => product.id),
+      cancel_url: product_url(product.id),
+      description: product.title,
+      amount: product.cost,
+      currency: "USD"
+    })
+    response = ppr.checkout
+    if response.valid?
+      redirect_to response.checkout_url
+    else
+      raise response.errors.inspect
     end
   end
 end

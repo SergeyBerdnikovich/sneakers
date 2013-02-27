@@ -1,20 +1,22 @@
 Sneakers::Application.routes.draw do
+  ActiveAdmin.routes(self)
+
+  devise_for :admin_users, ActiveAdmin::Devise.config
   devise_for :users
 
   resources :cities
 
   resources :twitter_accounts
 
-  ActiveAdmin.routes(self)
-
-  devise_for :admin_users, ActiveAdmin::Devise.config
-
   resources :products, :only => [:index, :show] do
     resources :orders, :only => [:new, :create]
   end
+
   resources :orders, :only => [:show, :index]
 
-  get "pages/welcome"
+  get 'pages/welcome'
+
+  get 'paypal/checkout', to: 'orders#paypal_checkout'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
