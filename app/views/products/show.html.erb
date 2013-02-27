@@ -20,8 +20,8 @@
                         <ul class="relative">
                           <% @product.galleries.each do |gallery| %>
                           <li class="wrapper_pic_div">
-                            <a href="http://localhost:3000/<%= gallery.image.url %>" target="_blank" rel="fancybox" title="" class="prods_pic_bg" style="width:220px;height:188px;">
-                              <img src="http://localhost:3000/<%= gallery.image.url %>" alt="" width="220" height="188"  style="width:220px;height:188px;margin:0px 0px 0px 0px;" />
+                            <a href="<%= gallery.image.url %>" target="_blank" rel="fancybox" title="" class="prods_pic_bg" style="width:220px;height:188px;">
+                              <img src="<%= gallery.image.url %>" alt="" width="220" height="188"  style="width:220px;height:188px;margin:0px 0px 0px 0px;" />
                               <div class="wrapper_pic_t" style="width:220px;height:188px;">
                                 <div class="wrapper_pic_r" style="width:220px;height:188px;">
                                   <div class="wrapper_pic_b" style="width:220px;height:188px;">
