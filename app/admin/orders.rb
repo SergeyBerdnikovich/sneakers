@@ -1,4 +1,22 @@
 ActiveAdmin.register Order do
+  index do
+    column :id
+    column :name
+    column :size
+    column :paid
+    column :city do |order|
+      order.city.name
+    end
+    column :twitter do |order|
+      order.city.twitter
+    end
+    column :paypal_customer_token
+    column :paypal_recurring_profile_token
+    column :created_at
+    column :updated_at
+
+    default_actions
+  end
   form do |f|
     f.inputs 'User' do
       f.select("user_id", User.all.collect {|p| [ p.email, p.id ] })
