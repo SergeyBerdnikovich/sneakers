@@ -41,6 +41,16 @@
                 <h5>
                   <a href="<%= product_path(product.id) %>" title="<%= product.title %>"><%= product.title %></a>
                 </h5>
+                <h5>
+                  <a href="<%= product_path(product.id) %>" title="<%= product.description %>"><%= product.description %></a>
+                </h5>
+                <h5>
+                  <a href="<%= product_path(product.id) %>" title="<%= product.release_date %>">
+                    <% if product.release_date %>
+                      release date: <%= product.release_date.to_s(:for_product) %>
+                    <% end %>
+                  </a>
+                </h5>
                 <div>
                   <span class="price"><%= number_to_currency product.cost %></span>
                   <a href="<%= product_path(product.id) %>" title="View">View</a>

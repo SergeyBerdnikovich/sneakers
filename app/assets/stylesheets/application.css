@@ -22,11 +22,9 @@
 
 #latest_products ul li {
   background: none repeat scroll 0 0 #FFFFFF;
-  border: 1px solid #DADADA;
   float: left;
-  height: 350px;
-  margin: 20px 20px 0 0;
-  padding: 0 30px;
+  height: 390px;
+  padding: 0 10px;
   width: 238px;
 }
 #latest_products ul {
@@ -37,15 +35,14 @@
 }
 #latest_products ul li a.product_image {
   display: block;
-  margin: 23px 0 0;
 }
 #latest_products ul li h5 {
-  height: 31px;
-  line-height: 16px;
+  height: 14px;
+  line-height: 13px;
 }
 #latest_products ul li h5 a {
   color: #929292;
-  font: 13px "Droid Sans";
+  font: 12px "Droid Sans";
   text-decoration: none;
 }
 #latest_products ul li h5 a:hover {
@@ -74,7 +71,4 @@
 #latest_products ul li div a:hover {
   background: none repeat scroll 0 0 #929292;
   transition: background 0.3s ease 0s;
-}
-div#latest_products {
-  margin-left: 55px;
 }
