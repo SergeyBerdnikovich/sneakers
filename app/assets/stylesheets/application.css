@@ -72,3 +72,6 @@
   background: none repeat scroll 0 0 #929292;
   transition: background 0.3s ease 0s;
 }
+#content {
+  padding-top: 50px;
+}
