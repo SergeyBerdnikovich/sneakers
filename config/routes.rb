@@ -14,7 +14,13 @@ Sneakers::Application.routes.draw do
 
   resources :orders, :only => [:show, :index]
 
+  resources :tinymce_assets, :only => :create
+
   get 'pages/welcome'
+  get 'pages/contact_us'
+  get 'pages/about_us'
+  get 'pages/faq'
+  get 'pages/conditions'
 
   get 'paypal/checkout', to: 'orders#paypal_checkout'
 

@@ -14,6 +14,11 @@ gem 'paypal-recurring'
 
 gem 'gibbon'
 
+gem 'tinymce-rails'
+gem 'tinymce-rails-langs'
+gem 'tinymce-rails-imageupload'
+gem 'sanitize'
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do

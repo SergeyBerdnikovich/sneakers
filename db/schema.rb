@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130227172214) do
+ActiveRecord::Schema.define(:version => 20130301112653) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -78,6 +78,15 @@ ActiveRecord::Schema.define(:version => 20130227172214) do
     t.integer  "user_id"
     t.string   "paypal_customer_token"
     t.string   "paypal_recurring_profile_token"
+  end
+
+  create_table "pages", :force => true do |t|
+    t.text     "about_us"
+    t.text     "faq"
+    t.text     "contact_us"
+    t.text     "conditions"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "products", :force => true do |t|

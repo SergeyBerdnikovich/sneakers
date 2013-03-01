@@ -1,3 +1,4 @@
+require 'sanitize/sanitize.rb'
 ActiveAdmin.register_page "Dashboard" do
 
   menu :priority => 1, :label => proc{ I18n.t("active_admin.dashboard") }
@@ -12,7 +13,7 @@ ActiveAdmin.register_page "Dashboard" do
 
     # Here is an example of a simple dashboard with columns and panels.
     #
-    # columns do
+     columns do
     #   column do
     #     panel "Recent Posts" do
     #       ul do
@@ -23,11 +24,11 @@ ActiveAdmin.register_page "Dashboard" do
     #     end
     #   end
 
-    #   column do
-    #     panel "Info" do
-    #       para "Welcome to ActiveAdmin."
-    #     end
-    #   end
-    # end
+       column do
+         panel "Newsletter" do
+           li  "<script type='text/javascript' language='JavaScript' src='http://facebook.us6.list-manage.com/subscriber-count?b=36&u=29ced2e7-8826-427d-84e4-edbd1d24c7cf&id=efb70bb866'></script>".html_safe
+         end
+       end
+     end
   end # content
 end
