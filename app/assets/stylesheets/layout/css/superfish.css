@@ -95,8 +95,8 @@ ul.sf-menu li li li.sfHover ul {
 }
 
 /*** DEMO SKIN ***/
-.sf-menu {
-	float: left;
+.sf-menu ul li.current_0.last a {
+	float: right;
 	margin: 0 0px 0 0px;
 
 }
