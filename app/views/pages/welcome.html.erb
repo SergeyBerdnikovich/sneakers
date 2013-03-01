@@ -38,7 +38,9 @@
                     <img src="/assets/no_photo_available.gif" width="240" height="220" />
                   <% end %>
                 </a>
-                <h5><a href="<%= product_path(product.id) %>" title="<%= product.title %>"><%= product.title %></a></h5>
+                <h5>
+                  <a href="<%= product_path(product.id) %>" title="<%= product.title %>"><%= product.title %></a>
+                </h5>
                 <div>
                   <span class="price"><%= number_to_currency product.cost %></span>
                   <a href="<%= product_path(product.id) %>" title="View">View</a>

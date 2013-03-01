@@ -1,5 +1,6 @@
 class Product < ActiveRecord::Base
-  attr_accessible :cost, :description, :title, :galleries_attributes
+  attr_accessible :cost, :description, :title, :galleries_attributes,
+                  :charged_back, :release_date, :charge_back_comment
 
   has_many :galleries, :dependent => :destroy
   has_many :orders

@@ -6,6 +6,8 @@
     <td>Size</td>
     <td>Name</td>
     <td>Paid</td>
+    <td>Charged back</td>
+    <td></td>
   </tr>
 <% @orders.each do |order| %>
 <tr>
@@ -13,8 +15,14 @@
   <td><%= order.product.title %></td>
   <td><%= order.product.cost %></td>
   <td><%= order.size %></td>
-  <td><%= order.name %></td></td>
+  <td><%= order.name %></td>
   <td><%= order.paid == true ? 'paid' : 'not paid' %></td>
+  <td><%= order.charged_back %></td>
+  <% if order.charged_back.blank? %>
+    <td><%= link_to 'Charge back', orders_charge_back_path(:order_id => order.id) %></td>
+  <% else %>
+    <td><%= link_to 'Uncharge back', orders_charge_back_path(:order_id => order.id) %></td>
+  <% end %>
 </tr>
 <% end %>
 </table>

@@ -12,6 +12,7 @@ Sneakers::Application.routes.draw do
     resources :orders, :only => [:new, :create]
   end
 
+  match 'orders/charge_back' => 'orders#charge_back'
   resources :orders, :only => [:show, :index]
 
   resources :tinymce_assets, :only => :create

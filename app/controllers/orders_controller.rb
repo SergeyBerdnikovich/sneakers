@@ -49,4 +49,19 @@ class OrdersController < ApplicationController
       raise response.errors.inspect
     end
   end
+
+  def charge_back
+    @order = Order.find(params[:order_id])
+    @order.charged_back == true ? @order.charged_back = false : @order.charged_back = true
+
+    respond_to do |format|
+      if @order.save
+        format.html { redirect_to orders_path, notice: 'Order was successfully updated.' }
+        format.json { render json: @order, status: :created, location: @order }
+      else
+        format.html { render action: "new" }
+        format.json { render json: @order.errors, status: :unprocessable_entity }
+      end
+    end
+  end
 end

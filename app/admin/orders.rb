@@ -4,6 +4,7 @@ ActiveAdmin.register Order do
     column :name
     column :size
     column :paid
+    column :charged_back
     column :city do |order|
       order.city.name
     end
@@ -26,6 +27,7 @@ ActiveAdmin.register Order do
       f.input :product
       f.input :size
       f.input :name
+      f.input :charged_back
       f.input :paypal_customer_token
       f.input :paypal_recurring_profile_token
     end
