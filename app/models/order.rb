@@ -1,7 +1,7 @@
 class Order < ActiveRecord::Base
   attr_accessible :city_id, :name, :paid, :payment_id, :product_id,
                   :size, :paypal_recurring_profile_token, :paypal_customer_token,
-                  :user_id, :charged_back
+                  :user_id, :charged_back, :charged_was_made
 
   belongs_to :city
   belongs_to :product
