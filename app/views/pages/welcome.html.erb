@@ -27,10 +27,13 @@
       </div>
       <div id="latest_products">
         <div class="block_content">
-          <h1 if='shopping'>Latest products</h1>
+          <h1 if='shopping'>Sneaker RSVPs</h1>
           <ul>
             <% @latest_products.each_with_index do |product, i| %>
               <li>
+                <h2>
+                  <a href="<%= product_path(product.id) %>" title="<%= product.title %>"><%= product.title %></a>
+                </h2>
                 <a class="product_image" href="<%= product_path(product.id) %>" title="<%= product.title %>">
                   <% if product.galleries.first %>
                     <img src="<%= product.galleries.first.image.url(:for_product) %>" alt="<%= product.title %>" width="240" height="220"/>
@@ -38,9 +41,6 @@
                     <img src="/assets/no_photo_available.gif" width="240" height="220" />
                   <% end %>
                 </a>
-                <h5>
-                  <a href="<%= product_path(product.id) %>" title="<%= product.title %>"><%= product.title %></a>
-                </h5>
                 <h5>
                   <a href="<%= product_path(product.id) %>" title="<%= product.description %>"><%= product.description %></a>
                 </h5>
@@ -53,7 +53,7 @@
                 </h5>
                 <div>
                   <span class="price"><%= number_to_currency product.cost %></span>
-                  <a href="<%= product_path(product.id) %>" title="View">View</a>
+                  <a href="<%= product_path(product.id) %>" title="BUY NOW">BUY NOW</a>
                 </div>
               </li>
             <% end %>
