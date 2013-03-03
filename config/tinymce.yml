@@ -40,7 +40,7 @@ plugins:
   - xhtmlxtras
 
 language:
-  - ru
+  - en
 
 fullscreen_new_window:
   - true
