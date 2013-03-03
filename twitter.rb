@@ -16,7 +16,7 @@ class Twitter_bot  #bot itself, note that it require global variable  $sql (em s
 
  def initialize(city,create_id = 0) #each object should be created for each separated city
   @city = city
-  @create_id = create_id 
+  @create_id = create_id
   @bots = Array.new
    @rest = nil  # for REST API
    @stream = nil # for streaming API
@@ -29,7 +29,7 @@ p "checking self"
  end
 
  def start_watching  #start watching for nike twitter acc in selected city with currect alive bot
- 
+
 
   Fiber.new{
       f = Fiber.current
@@ -37,7 +37,7 @@ p "checking self"
 bot_id = find_work_bot()
 p "bot found"
     if @bots.length == 0
-      listen = false 
+      listen = false
        alert("No active bots available")
      else
 if @listen == false  #don't need to have more than 1 listner
@@ -101,22 +101,22 @@ product_id.callback{|c| # finding product ID
 
 if c.to_a.length != 0
 product_id = 0
-begin 
+begin
 c.to_a.each{|product_object|
 p product_object
 if product_object['title'].strip.index(what) != nil
-product_id = product_object['id']  
+product_id = product_object['id']
 end
 
 if what.strip.index(product_object['title']) != nil
-product_id = product_object['id']  
+product_id = product_object['id']
 end
 }
 product_id = -1 if product_id == 0  #if we didn't find anything, to go out of the loop
 end while product_id == 0
 
   p "product id = #{product_id} "
-if product_id > 0 
+if product_id > 0
   orders_def = $sql.aquery("SELECT * FROM orders WHERE product_id = #{product_id} AND city_id = #{city_id}")
   orders_def.callback{|orders|
     p "ord is"
@@ -128,7 +128,7 @@ if product_id > 0
    begin
     p "rest is"
     @rest = connect_rest(bot_id)
-   
+
     p @rest
 
    @rest.direct_message_create(tofollow, hash + ", " + order['name'] + ", " + order['size'])
@@ -138,17 +138,17 @@ if product_id > 0
 
    rescue
    end
-   } 
+   }
   else
     alert("RSVP was found, product was recognized but no order found. Product_id is #{product_id}")
   end
-   
+
   }
 else
 alert("Product wasn't recognized in the DB - #{what}")
 end
 else  # if RSVP found but product not found
-  alert("RSVP failed!!!! Product  '%#{what}%' wasn't found :(") 
+  alert("RSVP failed!!!! Product  '%#{what}%' wasn't found :(")
 end
 }
  end
@@ -157,7 +157,7 @@ end
   bot = @bots[id]
   if bot != nil
     p bot
-  @rest = Twitter::Client.new( 
+  @rest = Twitter::Client.new(
   :consumer_key => bot['consumer_key'],
   :consumer_secret => bot['consumer_secret'],
   :oauth_token => bot['oauth_token'],
@@ -167,9 +167,9 @@ end
   else
   return 0
   end
-  
-  
-  
+
+
+
  end
 
  def connect_stream(id = 0)
@@ -177,15 +177,15 @@ end
   p bot
   if bot != nil
   $sql.query("UPDATE twitter_accounts SET last_used = #{Time.now.to_i + 1 } WHERE id = #{bot['id']} ")
-  p  Time.now.to_i + 10 
-  @stream = TweetStream::Client.new( 
+  p  Time.now.to_i + 10
+  @stream = TweetStream::Client.new(
   :consumer_key => bot['consumer_key'],
   :consumer_secret => bot['consumer_secret'],
   :oauth_token => bot['oauth_token'],
   :oauth_token_secret => bot['oauth_token_secret'],
   :auth_method   => :oauth
   )
-  
+
    return id + 1
   else
    return 0
@@ -203,19 +203,19 @@ def alert(message) #send an alert
 end
 
  def find_work_bot  #finding working bot in database
-p  "seeking bot"  
+p  "seeking bot"
 bot = $sql.query("SELECT * FROM twitter_accounts WHERE works = 1")
 @bots = bot.to_a
  p "bot array formed"
  end
 
   def find_work_stream_bot  #finding working bot for streaming, that never have been used in database
-p  "seeking stream bot"  
+p  "seeking stream bot"
  p $timestamp
-bot = $sql.query("SELECT * FROM twitter_accounts WHERE works = 1 AND last_used < #{$timestamp} LIMIT 1 OFFSET #{@create_id}")  #ofset is needed to not allow several cities to use one acc during startup 
+bot = $sql.query("SELECT * FROM twitter_accounts WHERE works = 1 AND last_used < #{$timestamp} LIMIT 1 OFFSET #{@create_id}")  #ofset is needed to not allow several cities to use one acc during startup
 
 return bot.to_a[0]
- 
+
  end
 
 
@@ -228,7 +228,7 @@ bot = $sql.query("SELECT * FROM twitter_accounts")
 bot.to_a.each{|bot|
   begin
 
-  test  = Twitter::Client.new( 
+  test  = Twitter::Client.new(
   :consumer_key => bot['consumer_key'],
   :consumer_secret => bot['consumer_secret'],
   :oauth_token => bot['oauth_token'],
@@ -253,7 +253,7 @@ def process_cities #creating new and refreshing existing cities
  cities.callback{|city_obj|
   create_id = 0
 city_obj.to_a.each{|city|
-  
+
 if $hash_with_cities[city['name']] != nil
 $hash_with_cities[city['name']].check_self
 else
@@ -268,9 +268,9 @@ end
 end
 
 EM.synchrony do
-sqlconf = { 
-    :host => "localhost", 
-    :database => config['development']['database'],   
+sqlconf = {
+    :host => "localhost",
+    :database => config['development']['database'],
     :reconnect => true,  # make sure you have correct credentials
     :username => config['development']['username'],
     :password => config['development']['password'],
