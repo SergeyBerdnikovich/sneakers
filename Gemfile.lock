@@ -180,6 +180,11 @@ PLATFORMS
 
 DEPENDENCIES
   activeadmin
+  twitter
+  tweetstream
+  em-synchrony
+  em-synchrony/mysql2
+  yaml
   coffee-rails (~> 3.2.1)
   devise
   gibbon
