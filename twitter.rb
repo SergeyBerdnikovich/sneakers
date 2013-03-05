@@ -14,183 +14,224 @@ p config
 
 class Twitter_bot  #bot itself, note that it require global variable  $sql (em syncchrony mysql2 implication) for connection to db
 
- def initialize(city,create_id = 0) #each object should be created for each separated city
-  @city = city
-  @create_id = create_id 
-  @bots = Array.new
-   @rest = nil  # for REST API
-   @stream = nil # for streaming API
-   @listen = false
- end
+  def initialize(city,create_id = 0) #each object should be created for each separated city
+    @city = city
+    @create_id = create_id
+    @bots = Array.new
+    @rest = nil  # for REST API
+    @stream = nil # for streaming API
+    @listen = false
+  end
 
   def check_self
-self.start_watching if @listen == false
-p "checking self"
- end
+    self.start_watching if @listen == false
+  end
 
- def start_watching  #start watching for nike twitter acc in selected city with currect alive bot
- 
+  def find_work_bot(id = 0)  #finding working bot in database
 
-  Fiber.new{
+
+    #f = Fiber.current
+    bot = $sql.query("SELECT * FROM twitter_accounts WHERE works = 1 LIMIT 1 OFFSET #{id}")
+    bot = bot.to_a[0]
+    #f.resume bot
+    return bot
+
+  end
+
+  def start_watching  #start watching for nike twitter acc in selected city with currect alive bot
+
+
+    Fiber.new{
       f = Fiber.current
-    begin
-bot_id = find_work_bot()
-p "bot found"
-    if @bots.length == 0
-      listen = false 
-       alert("No active bots available")
-     else
-if @listen == false  #don't need to have more than 1 listner
-tofollow =  $sql.query("SELECT * FROM cities WHERE id = #{@city}")
+      begin
+        bot = self.find_work_bot
+        p "bot found"
+        if bot.length == 0
+          listen = false
+          alert("No active bots available")
+        else
+          if @listen == false  #don't need to have more than 1 listner
+            tofollow =  $sql.query("SELECT * FROM cities WHERE id = #{@city}")
 
-tofollow = tofollow.to_a[0]['twitter']
+            tofollow = tofollow.to_a[0]['twitter']
+            p "conntecting rest"
+            @rest = connect_rest(bot)
 
-p "conntecting rest"
-connect_rest()
-p "rest connected"
-p "trying to follow"
-begin
-@rest.follow(tofollow)  #make sure we follow city we are watching
-rescue
-p "Error during to follow"
-end
-p "followed"
 
-user = @rest.user(tofollow)
+            user = @rest.user(tofollow)
 
-p user[:id]
+            p user[:id]
 
-#process_rsvp("Air Jordan 3 Retro","#dfsgsdg","33", tofollow)
-connect_stream()
-@listen = true
-p "connecting stream to #{user[:id]} "
-        @stream.follow(user[:id]) do |status|
+            #process_rsvp("Air Jordan 3 Retro","#dfsgsdg","33", tofollow)
+            connect_stream(tofollow, @city, user)
+            @listen = true
+            p "connecting stream to #{user[:id]} "
+            @stream.follow(user[:id]) do |status|
+
               rsvp = status.text.match(/(?:RSVP.*?for.{0,3}the)(.*?)(?:in sizes)(.*?)(#.*?)(?:Rules)/mi)
               if rsvp != nil  #we have found rsvp twitter
-                p "RSVP FOUND!!!!"
+                p "RSVP FOUND!!!!, pausing"
                 p rsvp
-               process_rsvp(rsvp[1].strip,rsvp[3],rsvp[2], tofollow, @city)
+                Fiber.new{
+
+                  process_rsvp(rsvp[1].strip,rsvp[3],rsvp[2], tofollow, @city, user[:id])
+                  EM::Synchrony.sleep(6)  #pause to not looks like bot
+                }.resume
               else
                 p "there is a tweet but no rsvp found:"
                 p status.text
               end
+
+            end
+            p "end stream block"
+
+          end
+
         end
-p "end stream block"
-end
-end
 
-rescue Exception => e
-  p e
-  p e.backtrace
-  @listen = false
-  alert("Unable to start listner for cityid #{@city}")
-end
+      rescue Exception => e
+        p e
+        p e.backtrace
+        @listen = false
+        alert("Unable to start listner for cityid #{@city}")
+      end
 
 
-}.resume
- end
-
-
-
-
-
-
- def process_rsvp(what, hash, sizes, tofollow,city_id) #things to do with rsvp
-product_id = $sql.aquery("SELECT * FROM products")
-product_id.callback{|c| # finding product ID
-
-if c.to_a.length != 0
-product_id = 0
-begin 
-c.to_a.each{|product_object|
-p product_object
-if product_object['title'].strip.index(what) != nil
-product_id = product_object['id']  
-end
-
-if what.strip.index(product_object['title']) != nil
-product_id = product_object['id']  
-end
-}
-product_id = -1 if product_id == 0  #if we didn't find anything, to go out of the loop
-end while product_id == 0
-
-  p "product id = #{product_id} "
-if product_id > 0 
-  orders_def = $sql.aquery("SELECT * FROM orders WHERE product_id = #{product_id} AND city_id = #{city_id}")
-  orders_def.callback{|orders|
-    p "ord is"
-    p orders
-
-    bot_id = 0
-   if orders.to_a.length > 0
-     orders.to_a.each{|order|
-   begin
-    p "rest is"
-    @rest = connect_rest(bot_id)
-   
-    p @rest
-
-   @rest.direct_message_create(tofollow, hash + ", " + order['name'] + ", " + order['size'])
-   p "send message success for #{@city} behalf of #{order['name']}"
-   bot_id += 1
-   alert("Not enough bots!") if bot_id == 0 #if it is 0 - no more bots
-
-   rescue
-   end
-   } 
-  else
-    alert("RSVP was found, product was recognized but no order found. Product_id is #{product_id}")
+    }.resume
   end
-   
-  }
-else
-alert("Product wasn't recognized in the DB - #{what}")
-end
-else  # if RSVP found but product not found
-  alert("RSVP failed!!!! Product  '%#{what}%' wasn't found :(") 
-end
-}
- end
 
- def connect_rest(id = 0)
-  bot = @bots[id]
-  if bot != nil
+
+  def follow(who_to_follow, user_id, bot_id)  #we just here test and form array if we are following one specific shop
+    p  "trying to process following"
+    botsfollowings = $sql.query("SELECT following FROM twitter_accounts WHERE id = #{bot_id}")
+    botsfollowings = botsfollowings.to_a[0]['following']
+    p user_id.to_s
+    p bot_id
+    if botsfollowings.index(user_id.to_s) == nil
+      p "We have found that bot_id #{bot_id} doesnt followed #{$who_to_follow}, trying to fix that"
+      begin
+        bot = self.find_work_bot(bot_id)
+        @follow_rest = connect_rest(bot)
+        @follow_rest.follow(tofollow)  #make sure we follow city we are watching
+
+      rescue
+        p "Error during to follow"
+      end
+      p "followed"
+    end
+
+    p "all ok with follow"
+  end
+
+
+
+  def process_rsvp(what, hash, sizes, tofollow,city_id, user_id) #things to do with rsvp
+
+    product_id = $sql.aquery("SELECT * FROM products")
+    product_id.callback{|c| # finding product ID
+      Fiber.new{
+        if c.to_a.length != 0
+          product_id = 0
+          begin
+            c.to_a.each{|product_object|
+              p product_object
+              if product_object['title'].strip.index(what) != nil
+                product_id = product_object['id']
+              end
+
+              if what.strip.index(product_object['title']) != nil
+                product_id = product_object['id']
+              end
+            }
+            product_id = -1 if product_id == 0  #if we didn't find anything, to go out of the loop
+          end while product_id == 0
+
+          p "product id = #{product_id} "
+          if product_id > 0
+            orders_def = $sql.aquery("SELECT * FROM orders WHERE product_id = #{product_id} AND city_id = #{city_id} AND sended = false")
+            orders_def.callback{|orders|
+              Fiber.new{
+                p "ord is"
+                p orders.to_a
+
+                i = 0
+                if orders.to_a.length > 0
+                  orders.to_a.each{|order|
+                    begin
+                      p "rest is"
+                      bot = self.find_work_bot(i)
+                      @rest = connect_rest(bot)
+
+                      p "rest connected, now follow"
+                      self.follow(tofollow, user_id,bot['id'])
+
+                      p "sending message..."
+                      what_to_send = hash + ", " + order['name'] + ", " + order['size']
+                      @rest.direct_message_create(tofollow, what_to_send)
+                      $sql.aquery("UPDATE orders SET sended = true, message = '#{Time.now} message was sent to #{tofollow} - #{what_to_send}' WHERE id = #{order['id']}")
+                      p "send message success for #{@city} behalf of #{order['name']}"
+                      i += 1
+                      alert("Not enough bots!") if bot_id == 0 #if it is 0 - no more bots
+
+                    rescue
+                    end
+                  }
+                else
+                  alert("RSVP was found, product was recognized but no order found. Product_id is #{product_id}")
+                end
+              }.resume
+            }
+          else
+            alert("Product wasn't recognized in the DB - #{what}")
+          end
+        else  # if RSVP found but product not found
+          alert("RSVP failed!!!! Product  '%#{what}%' wasn't found :(")
+        end
+      }.resume
+    }
+
+
+  end
+
+  def connect_rest(bot)
+    #  f = Fiber.current
+    if bot.length != 0
+      p bot
+      @conn = Twitter::Client.new(
+      :consumer_key => bot['consumer_key'],
+      :consumer_secret => bot['consumer_secret'],
+      :oauth_token => bot['oauth_token'],
+      :oauth_token_secret => bot['oauth_token_secret']
+      )
+      return @conn
+    else
+      return 0
+    end
+
+
+
+  end
+
+  def connect_stream(id = 0,who_to_follow, user_id, bot_id)
+    bot = find_work_stream_bot()
     p bot
-  @rest = Twitter::Client.new( 
-  :consumer_key => bot['consumer_key'],
-  :consumer_secret => bot['consumer_secret'],
-  :oauth_token => bot['oauth_token'],
-  :oauth_token_secret => bot['oauth_token_secret']
-   )
-  return @rest
-  else
-  return 0
-  end
-  
-  
-  
- end
+    if bot != nil
+      self.follow(who_to_follow, user_id,bot['id'])
+      $sql.query("UPDATE twitter_accounts SET last_used = #{Time.now.to_i + 1 } WHERE id = #{bot['id']} ")
+      p  Time.now.to_i + 10
+      @stream = TweetStream::Client.new(
+      :consumer_key => bot['consumer_key'],
+      :consumer_secret => bot['consumer_secret'],
+      :oauth_token => bot['oauth_token'],
+      :oauth_token_secret => bot['oauth_token_secret'],
+      :auth_method   => :oauth
+      )
 
- def connect_stream(id = 0)
-  bot = find_work_stream_bot()
-  p bot
-  if bot != nil
-  $sql.query("UPDATE twitter_accounts SET last_used = #{Time.now.to_i + 1 } WHERE id = #{bot['id']} ")
-  p  Time.now.to_i + 10 
-  @stream = TweetStream::Client.new( 
-  :consumer_key => bot['consumer_key'],
-  :consumer_secret => bot['consumer_secret'],
-  :oauth_token => bot['oauth_token'],
-  :oauth_token_secret => bot['oauth_token_secret'],
-  :auth_method   => :oauth
-  )
-  
-   return id + 1
-  else
-   return 0
+      return id + 1
+    else
+      return 0
+    end
   end
- end
 
 end
 
@@ -202,93 +243,125 @@ def alert(message) #send an alert
   p message
 end
 
- def find_work_bot  #finding working bot in database
-p  "seeking bot"  
-bot = $sql.query("SELECT * FROM twitter_accounts WHERE works = 1")
-@bots = bot.to_a
- p "bot array formed"
- end
 
-  def find_work_stream_bot  #finding working bot for streaming, that never have been used in database
-p  "seeking stream bot"  
- p $timestamp
-bot = $sql.query("SELECT * FROM twitter_accounts WHERE works = 1 AND last_used < #{$timestamp} LIMIT 1 OFFSET #{@create_id}")  #ofset is needed to not allow several cities to use one acc during startup 
 
-return bot.to_a[0]
- 
- end
+def find_work_stream_bot  #finding working bot for streaming, that never have been used in database
+  p  "seeking stream bot"
+  p $timestamp
+  bot = $sql.query("SELECT * FROM twitter_accounts WHERE works = 1 AND last_used < #{$timestamp} LIMIT 1 OFFSET #{@create_id}")  #ofset is needed to not allow several cities to use one acc during startup
+
+  return bot.to_a[0]
+
+end
 
 
 
- def check_bots  #check if current bot ok
-p "checking bots"
-Fiber.new{
-bot = $sql.query("SELECT * FROM twitter_accounts")
+def check_bots  #check if current bot ok
+  p "checking bots"
+  Fiber.new{
+    bot = $sql.query("SELECT * FROM twitter_accounts")
 
-bot.to_a.each{|bot|
-  begin
+    bot.to_a.each{|bot|
+      begin
 
-  test  = Twitter::Client.new( 
-  :consumer_key => bot['consumer_key'],
-  :consumer_secret => bot['consumer_secret'],
-  :oauth_token => bot['oauth_token'],
-  :oauth_token_secret => bot['oauth_token_secret']
-   )
-  test.user_timeline("Dvporg").first.text
-  $sql.aquery("UPDATE twitter_accounts SET works = 1 WHERE id= #{bot['id']}")  #if no exception than its ok
-  p "good bot found"
-  rescue
-  $sql.aquery("UPDATE twitter_accounts SET works = 0  WHERE id= #{bot['id']}")  #if an exception - something wrong with twitter account
-  p "bad bot found"
-  end
-}
+        test  = Twitter::Client.new(
+        :consumer_key => bot['consumer_key'],
+        :consumer_secret => bot['consumer_secret'],
+        :oauth_token => bot['oauth_token'],
+        :oauth_token_secret => bot['oauth_token_secret']
+        )
+        test.user_timeline("Dvporg").first.text
+        $sql.aquery("UPDATE twitter_accounts SET works = 1 WHERE id= #{bot['id']}")  #if no exception than its ok
+        p "good bot found"
+      rescue
+        $sql.aquery("UPDATE twitter_accounts SET works = 0  WHERE id= #{bot['id']}")  #if an exception - something wrong with twitter account
+        p "bad bot found"
+      end
+    }
 
-}.resume
- end
+  }.resume
+end
 
 def process_cities #creating new and refreshing existing cities
- Fiber.new{
- cities =  $sql.aquery("SELECT * FROM cities")
+  Fiber.new{
+    cities =  $sql.aquery("SELECT * FROM cities")
 
- cities.callback{|city_obj|
-  create_id = 0
-city_obj.to_a.each{|city|
-  
-if $hash_with_cities[city['name']] != nil
-$hash_with_cities[city['name']].check_self
-else
+    cities.callback{|city_obj|
+      create_id = 0
+      city_obj.to_a.each{|city|
 
-$hash_with_cities[city['name']] = Twitter_bot.new(city['id'],create_id)
-create_id += 1
-$hash_with_cities[city['name']].start_watching
+        if $hash_with_cities[city['twitter']] != nil
+          $hash_with_cities[city['twitter']].check_self
+        else
+
+          $hash_with_cities[city['twitter']] = Twitter_bot.new(city['id'],create_id)
+          p "Listner launched for #{city['title']}"
+          create_id += 1
+          $hash_with_cities[city['twitter']].start_watching
+        end
+      }
+    }
+  }.resume
 end
- }
-}
-}.resume
+
+def form_bots_following_list
+  f = Fiber.current
+  botlist = Array.new
+  bots =  $sql.aquery("SELECT * FROM twitter_accounts")
+  bots.callback{|bots_obj|
+    bots_obj.to_a.each{|bot|
+
+      bot_to_process  = Twitter::Client.new(
+      :consumer_key => bot['consumer_key'],
+      :consumer_secret => bot['consumer_secret'],
+      :oauth_token => bot['oauth_token'],
+      :oauth_token_secret => bot['oauth_token_secret']
+      )
+      p "bots are"
+      cursor = 0
+      next_cursor = -1
+      following = ""
+      while cursor != next_cursor do
+        cursor = next_cursor
+        followings = bot_to_process.friend_ids({:cursor=>cursor})
+        next_cursor =  followings.next_cursor
+        p followings.ids
+        following += followings.ids.join(";")
+      end
+      $sql.aquery("UPDATE twitter_accounts SET following = '#{following}' WHERE id = #{bot['id']}")
+
+
+    }
+
+  }
+
 end
 
 EM.synchrony do
-sqlconf = { 
-    :host => "localhost", 
-    :database => config['development']['database'],   
+  p "Application start to initialize"
+  sqlconf = {
+    :host => "localhost",
+    :database => config['development']['database'],
     :reconnect => true,  # make sure you have correct credentials
     :username => config['development']['username'],
     :password => config['development']['password'],
     :size => 30,
-}
+  }
 
-    $sql = EventMachine::Synchrony::ConnectionPool.new(size: 20) do
-        Mysql2::EM::Client.new(sqlconf)
-    end
-
-$hash_with_cities = Hash.new  #hash where to put each twitter acc for exact city
-
-process_cities()
-
-
-EM::PeriodicTimer.new(10) do
- p "work"
+  $sql = EventMachine::Synchrony::ConnectionPool.new(size: 20) do
+    Mysql2::EM::Client.new(sqlconf)
+  end
+  p "Database successfully initialized"
+  p "Starting to form following lists for bots accounts..."
+  form_bots_following_list()  #getting a list of followers for each bot to not to follow shop we are already following
+  p "Lists were formed!"
+  $hash_with_cities = Hash.new  #hash where to put each twitter acc for exact city
+  p "Launching listiners for each city"
   process_cities()
-end
+
+
+  EM::PeriodicTimer.new(10) do
+    process_cities()
+  end
 
 end
