@@ -5,6 +5,9 @@ ActiveAdmin.register Order do
     column :size
     column :paid
     column :sended
+    column :product do |order|
+      order.product.title
+    end
     column :city do |order|
       order.city.name
     end
@@ -14,7 +17,7 @@ ActiveAdmin.register Order do
     column :paypal_customer_token
     column :paypal_recurring_profile_token
     column :charged_back
-    column :charged_was_made    
+    column :charged_was_made
 
     default_actions
   end
