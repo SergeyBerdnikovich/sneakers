@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  twitter_account_id: 1
+  text: MyString
+  received: 2013-03-06 00:53:22
+
+two:
+  twitter_account_id: 1
+  text: MyString
+  received: 2013-03-06 00:53:22
