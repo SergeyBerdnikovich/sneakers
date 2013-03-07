@@ -29,17 +29,14 @@ class Twitter_bot  #bot itself, note that it require global variable  $sql (em s
 
   def find_work_bot(id = 0)  #finding working bot in database
 
-
     #f = Fiber.current
     bot = $sql.query("SELECT * FROM twitter_accounts WHERE works = 1 LIMIT 1 OFFSET #{id}")
     bot = bot.to_a[0]
     #f.resume bot
     return bot
-
   end
 
   def start_watching  #start watching for nike twitter acc in selected city with currect alive bot
-
 
     Fiber.new{
       f = Fiber.current
@@ -56,7 +53,6 @@ class Twitter_bot  #bot itself, note that it require global variable  $sql (em s
             tofollow = tofollow.to_a[0]['twitter']
             p "conntecting rest"
             @rest = connect_rest(bot)
-
 
             user = @rest.user(tofollow)
 
@@ -96,10 +92,8 @@ class Twitter_bot  #bot itself, note that it require global variable  $sql (em s
         alert("Unable to start listner for cityid #{@city}")
       end
 
-
     }.resume
   end
-
 
   def follow(who_to_follow, user_id, bot_id)  #we just here test and form array if we are following one specific shop
     p  "trying to process following"
@@ -122,8 +116,6 @@ class Twitter_bot  #bot itself, note that it require global variable  $sql (em s
 
     p "all ok with follow"
   end
-
-
 
   def process_rsvp(what, hash, sizes, tofollow,city_id, user_id) #things to do with rsvp
 
@@ -189,8 +181,6 @@ class Twitter_bot  #bot itself, note that it require global variable  $sql (em s
         end
       }.resume
     }
-
-
   end
 
   def connect_rest(bot)
@@ -207,9 +197,6 @@ class Twitter_bot  #bot itself, note that it require global variable  $sql (em s
     else
       return 0
     end
-
-
-
   end
 
   def connect_stream(id = 0,who_to_follow, user_id, bot_id)
@@ -232,7 +219,6 @@ class Twitter_bot  #bot itself, note that it require global variable  $sql (em s
       return 0
     end
   end
-
 end
 
 def release_bot(id)  #reset timestamp to bot be able to used for streaming
@@ -243,18 +229,13 @@ def alert(message) #send an alert
   p message
 end
 
-
-
 def find_work_stream_bot  #finding working bot for streaming, that never have been used in database
   p  "seeking stream bot"
   p $timestamp
   bot = $sql.query("SELECT * FROM twitter_accounts WHERE works = 1 AND last_used < #{$timestamp} LIMIT 1 OFFSET #{@create_id}")  #ofset is needed to not allow several cities to use one acc during startup
 
   return bot.to_a[0]
-
 end
-
-
 
 def check_bots  #check if current bot ok
   p "checking bots"
@@ -263,7 +244,6 @@ def check_bots  #check if current bot ok
 
     bot.to_a.each{|bot|
       begin
-
         test  = Twitter::Client.new(
         :consumer_key => bot['consumer_key'],
         :consumer_secret => bot['consumer_secret'],
@@ -278,7 +258,6 @@ def check_bots  #check if current bot ok
         p "bad bot found"
       end
     }
-
   }.resume
 end
 
@@ -329,12 +308,8 @@ def form_bots_following_list
         following += followings.ids.join(";")
       end
       $sql.aquery("UPDATE twitter_accounts SET following = '#{following}' WHERE id = #{bot['id']}")
-
-
     }
-
   }
-
 end
 
 EM.synchrony do
@@ -351,6 +326,7 @@ EM.synchrony do
   $sql = EventMachine::Synchrony::ConnectionPool.new(size: 20) do
     Mysql2::EM::Client.new(sqlconf)
   end
+
   p "Database successfully initialized"
   p "Starting to form following lists for bots accounts..."
   form_bots_following_list()  #getting a list of followers for each bot to not to follow shop we are already following
@@ -359,9 +335,7 @@ EM.synchrony do
   p "Launching listiners for each city"
   process_cities()
 
-
   EM::PeriodicTimer.new(10) do
     process_cities()
   end
-
 end

@@ -19,6 +19,10 @@ gem 'tinymce-rails-langs'
 gem 'tinymce-rails-imageupload'
 gem 'sanitize'
 
+gem 'twitter'
+gem 'tweetstream'
+gem 'em-synchrony'
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
