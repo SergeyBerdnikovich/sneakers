@@ -7,7 +7,7 @@
         <%= f.hidden_field :paypal_recurring_profile_token %>
 
         <% if @order.payment_provided? %>
-          Payment has been provided. Clicl 'Create Order' to comlete the order.
+          Payment has been provided. Click 'Create Order' to comlete the order.
           <div class="field">
             <%= f.label :name %>:<br />
             <%= f.text_field :name %>
