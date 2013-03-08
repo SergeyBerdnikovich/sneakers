@@ -16,14 +16,16 @@
   <td><%= order.product.cost %></td>
   <td><%= order.size %></td>
   <td><%= order.name %></td>
-  <td><%= order.paid == true ? 'paid' : 'not paid' %></td>
+  <td><%= order.paid == true ? 'Paid' : link_to('Pay now', order_pay_path(order.id)) %></td>
   <td><%= order.charged_back %></td>
-  <% if order.charged_back.blank? && order.charged_was_made.blank? %>
-    <td><%= link_to 'Charge back', orders_charge_back_path(:order_id => order.id) %></td>
-  <% elsif order.charged_was_made.blank? %>
-    <td><%= link_to 'Uncharge back', orders_charge_back_path(:order_id => order.id) %></td>
-  <% else %>
-    <td>Money refunded</td>
+  <% if order.paid == true %>
+    <% if order.charged_back.blank? && order.charged_was_made.blank? %>
+      <td><%= link_to 'Charge back', orders_charge_back_path(:order_id => order.id) %></td>
+    <% elsif order.charged_was_made.blank? %>
+      <td><%= link_to 'Uncharge back', orders_charge_back_path(:order_id => order.id) %></td>
+    <% else %>
+      <td>Money refunded</td>
+    <% end %>
   <% end %>
 </tr>
 <% end %>

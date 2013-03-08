@@ -376,15 +376,6 @@ EM.synchrony do
   $sql = EventMachine::Synchrony::ConnectionPool.new(size: 20) do
     Mysql2::EM::Client.new(sqlconf)
   end
-<<<<<<< HEAD
-
-  p "Database successfully initialized"
-  p "Starting to form following lists for bots accounts..."
-  form_bots_following_list()  #getting a list of followers for each bot to not to follow shop we are already following
-  p "Lists were formed!"
-  $hash_with_cities = Hash.new  #hash where to put each twitter acc for exact city
-  p "Launching listiners for each city"
-=======
  check_bots
 p "Database successfully initialized"
 p "Starting to form following lists for bots accounts..."
@@ -396,18 +387,10 @@ process_cities()
 
 
 EM::PeriodicTimer.new(10) do
->>>>>>> ba58618cc0e9f42cf569a0b29dbbb45ebae220db
   process_cities()
 end
 
-<<<<<<< HEAD
-  EM::PeriodicTimer.new(10) do
-    process_cities()
-  end
-end
-=======
 
 
 end
 
->>>>>>> ba58618cc0e9f42cf569a0b29dbbb45ebae220db

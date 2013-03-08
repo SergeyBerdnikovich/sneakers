@@ -13,7 +13,8 @@ Sneakers::Application.routes.draw do
   end
 
   match 'orders/charge_back' => 'orders#charge_back'
-  resources :orders, :only => [:show, :index]
+  resources :orders, :only => [:show, :index, :update]
+  match 'orders/:id/pay' => 'orders#pay', :as => :order_pay
 
   resources :tinymce_assets, :only => :create
 

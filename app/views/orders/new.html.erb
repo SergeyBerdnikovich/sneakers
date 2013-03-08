@@ -2,28 +2,19 @@
   <div class="wrapper">
     <div class="row_4">
       <%= form_for [:product, @order] do |f| %>
-        <%= f.hidden_field :paid %>
-        <%= f.hidden_field :paypal_customer_token %>
-        <%= f.hidden_field :paypal_recurring_profile_token %>
-
-        <% if @order.payment_provided? %>
-          Payment has been provided. Click 'Create Order' to comlete the order.
-          <div class="field">
-            <%= f.label :name %>:<br />
-            <%= f.text_field :name %>
-          </div>
-          <div class="field">
-            <%= f.label :size %>:<br />
-            <%= f.text_field :size %>
-          </div>
-          <div class="field">
-            <%= f.label :city_name %><br />
-            <%= f.collection_select :city_id, City.all, :id, :name, prompt: true %>
-          </div>
-          <%= f.submit %>
-        <% else %>
-          <%= link_to image_tag("https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif"), paypal_checkout_path(:product_id => @order.product_id) %><br />
-        <% end %>
+        <div class="field">
+          <%= f.label :name %>:<br />
+          <%= f.text_field :name %>
+        </div>
+        <div class="field">
+          <%= f.label :size %>:<br />
+          <%= f.text_field :size %>
+        </div>
+        <div class="field">
+          <%= f.label :city_name %><br />
+          <%= f.collection_select :city_id, City.all, :id, :name, prompt: true %>
+        </div>
+        <%= f.submit %>
       <% end %>
     </div>
   </div>

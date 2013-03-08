@@ -1,0 +1,19 @@
+<div id="bodyWrapper" class="bg_body ">
+  <div class="wrapper">
+    <div class="row_4">
+      <%= form_for @order do |f| %>
+        <%= f.hidden_field :paid %>
+        <%= f.hidden_field :paypal_customer_token %>
+        <%= f.hidden_field :paypal_recurring_profile_token %>
+
+        <% if @order.payment_provided? %>
+          Payment has been provided. Click 'Update Order' to comlete the order.
+          <br /><br />
+          <%= f.submit %>
+        <% else %>
+          <%= link_to image_tag("https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif"), paypal_checkout_path(:product_id => @order.product_id, :order_id => @order.id) %><br />
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
