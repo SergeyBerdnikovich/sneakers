@@ -4,7 +4,7 @@ ActiveAdmin.register Order do
     column :name
     column :size
     column :paid
-    column :sended
+    column :sent
     column :product do |order|
       order.product.title
     end
@@ -30,7 +30,7 @@ ActiveAdmin.register Order do
       f.input :product
       f.input :size
       f.input :name
-      f.input :sended
+      f.input :sent
       f.input :message
       f.input :charged_back
       f.input :charged_was_made
