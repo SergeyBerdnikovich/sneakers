@@ -9,6 +9,7 @@ require 'eventmachine'
 require 'yaml'
 require "levenshtein"
 
+$env = 'production'
 
 config = YAML.load_file('config/database.yml')
 $timestamp = Time.now.to_i  #used to find if twitter acc was used after app launched or not. Global because of the same for every object.
@@ -144,6 +145,7 @@ class Twitter_bot  #bot itself, note that it require global variable  $sql (em s
     p  "trying to process following"
     botsfollowings = $sql.query("SELECT following FROM twitter_accounts WHERE id = #{bot_id}")
     botsfollowings = botsfollowings.to_a[0]['following']
+    botsfollowings = "" if botsfollowings == nil
     p user_id.to_s
     p bot_id
     if botsfollowings.index(user_id.to_s) == nil
@@ -338,7 +340,7 @@ def find_work_stream_bot  #finding working bot for streaming, that never have be
   p  "seeking stream bot"
   p $timestamp
   bot = $sql.query("SELECT * FROM twitter_accounts WHERE works = 1 AND last_used < #{$timestamp} LIMIT 1 OFFSET #{@create_id}")  #ofset is needed to not allow several cities to use one acc during startup
-
+  p bot.to_a
   return bot.to_a[0]
 
 end
@@ -397,10 +399,10 @@ EM.fork_reactor do
   config = YAML.load_file('config/database.yml')
     sqlconf = {
     :host => "localhost",
-    :database => config['development']['database'],
+    :database => config[$env]['database'],
     :reconnect => true,  # make sure you have correct credentials
-    :username => config['development']['username'],
-    :password => config['development']['password'],
+    :username => config[$env]['username'],
+    :password => config[$env]['password'],
     :size => 30,
   }
 
@@ -456,10 +458,13 @@ end
 def process_cities_outside #monitoring and starting new working reactors
   Fiber.new{
     cities =  $sql.aquery("SELECT * FROM cities")
-
+     p "process outside"
       cities.callback{|city_obj|
-     
+        p "callback"
+     p city_obj.to_a
+      p $listenarr
       if city_obj.to_a != $listenarr
+        p "starting new listeners"
         $hash_with_cities = Hash.new()
       new_listeners()
       end
@@ -534,10 +539,10 @@ EM.synchrony do
   p "Application start to initialize"
   sqlconf = {
     :host => "localhost",
-    :database => config['development']['database'],
+    :database => config[$env]['database'],
     :reconnect => true,  # make sure you have correct credentials
-    :username => config['development']['username'],
-    :password => config['development']['password'],
+    :username => config[$env]['username'],
+    :password => config[$env]['password'],
     :size => 30,
   }
 
