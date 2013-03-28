@@ -18,6 +18,11 @@ ActiveAdmin.register Order do
       order.city.twitter
       end
     end
+    column :twitter_account_id do |twitter_account|
+      if twitter_account.city != nil
+      twitter_account.name
+      end
+    end
     column :paypal_customer_token
     column :paypal_recurring_profile_token
     column :charged_back
@@ -31,6 +36,7 @@ ActiveAdmin.register Order do
     end
     f.inputs 'Order' do
       f.input :city
+      f.input :twitter_account_id
       f.input :product
       f.input :size
       f.input :name

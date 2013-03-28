@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130321182215) do
+ActiveRecord::Schema.define(:version => 20130328014352) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -62,6 +62,14 @@ ActiveRecord::Schema.define(:version => 20130321182215) do
     t.string   "sender"
   end
 
+  create_table "dms_to_sends", :force => true do |t|
+    t.string   "message"
+    t.integer  "twitter_account_id"
+    t.integer  "hashtag_id"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+  end
+
   create_table "galleries", :force => true do |t|
     t.integer  "product_id"
     t.string   "image_file_name"
@@ -74,6 +82,16 @@ ActiveRecord::Schema.define(:version => 20130321182215) do
   end
 
   add_index "galleries", ["product_id"], :name => "index_galleries_on_product_id"
+
+  create_table "hashtags", :force => true do |t|
+    t.string   "link"
+    t.integer  "city_id"
+    t.integer  "product_id"
+    t.string   "hashtag"
+    t.string   "received_from"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
 
   create_table "orders", :force => true do |t|
     t.integer  "city_id"
@@ -91,6 +109,7 @@ ActiveRecord::Schema.define(:version => 20130321182215) do
     t.boolean  "charged_was_made"
     t.boolean  "sent",                           :default => false
     t.string   "message"
+    t.integer  "twitter_account_id"
   end
 
   create_table "pages", :force => true do |t|

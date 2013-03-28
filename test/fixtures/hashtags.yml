@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  link: MyString
+  city_id: 1
+  product_id: 1
+  hashtag: MyString
+  received_from: MyString
+
+two:
+  link: MyString
+  city_id: 1
+  product_id: 1
+  hashtag: MyString
+  received_from: MyString

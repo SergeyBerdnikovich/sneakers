@@ -1,0 +1,2 @@
+class DmsToSendsController < ApplicationController
+end

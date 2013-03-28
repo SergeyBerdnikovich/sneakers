@@ -1,4 +1,10 @@
 Sneakers::Application.routes.draw do
+  resources :dms_to_sends
+
+
+  resources :hashtags
+
+
   ActiveAdmin.routes(self)
 
   devise_for :admin_users, ActiveAdmin::Devise.config
