@@ -9,18 +9,18 @@ ActiveAdmin.register Order do
       order.product.title
     end
     column :city do |order|
-      if order.city != nil
-      order.city.name
+      if order.city
+        order.city.name
       end
     end
     column :twitter do |order|
-      if order.city != nil
-      order.city.twitter
+      if order.city
+        order.city.twitter
       end
     end
     column :twitter_account_id do |twitter_account|
-      if twitter_account.city != nil
-      twitter_account.name
+      if twitter_account.city
+        twitter_account.name
       end
     end
     column :paypal_customer_token
@@ -34,9 +34,11 @@ ActiveAdmin.register Order do
     f.inputs 'User' do
       f.select("user_id", User.all.collect {|p| [ p.email, p.id ] })
     end
+    f.inputs 'Twitter account' do
+      f.select("twitter_account_id", TwitterAccount.all.collect {|p| [ p.name, p.id ] })
+    end
     f.inputs 'Order' do
       f.input :city
-      f.input :twitter_account_id
       f.input :product
       f.input :size
       f.input :name
