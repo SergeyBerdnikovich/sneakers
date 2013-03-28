@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130312110404) do
+ActiveRecord::Schema.define(:version => 20130321182215) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -114,20 +114,22 @@ ActiveRecord::Schema.define(:version => 20130312110404) do
   end
 
   create_table "twitter_accounts", :force => true do |t|
-    t.text     "name"
-    t.text     "comment"
-    t.integer  "last_checked"
-    t.text     "consumer_key"
-    t.text     "consumer_secret"
-    t.text     "oauth_token"
-    t.text     "oauth_token_secret"
-    t.datetime "created_at",         :null => false
-    t.datetime "updated_at",         :null => false
+    t.string   "name"
+    t.string   "comment"
+    t.integer  "last_checked",       :default => 0
+    t.string   "consumer_key"
+    t.string   "consumer_secret"
+    t.string   "oauth_token"
+    t.string   "oauth_token_secret"
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
     t.boolean  "works"
     t.string   "password"
     t.integer  "city_id"
-    t.integer  "last_used"
+    t.integer  "last_used",          :default => 0
     t.string   "following"
+    t.integer  "pause",              :default => 0
+    t.boolean  "enabled"
   end
 
   create_table "users", :force => true do |t|

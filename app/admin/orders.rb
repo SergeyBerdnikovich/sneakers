@@ -9,10 +9,14 @@ ActiveAdmin.register Order do
       order.product.title
     end
     column :city do |order|
+      if order.city != nil
       order.city.name
+      end
     end
     column :twitter do |order|
+      if order.city != nil
       order.city.twitter
+      end
     end
     column :paypal_customer_token
     column :paypal_recurring_profile_token
